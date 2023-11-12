@@ -1,0 +1,26 @@
+import axios, { AxiosResponse } from 'axios';
+
+// 検索結果のobjectを返却
+
+export const getObjectFromFreeKeyword = async (keyword: string, platformUID: string, platformToken: string) => {
+  const tverSearchBaseURL = process.env.NEXT_PUBLIC_TVER_SEARCH_API;
+  if (!tverSearchBaseURL) {
+    throw new Error("TVER_SEARCH_API is not defined");
+  }
+  const tverSearchURL = `${tverSearchBaseURL}?platform_uid=${platformUID}&platform_token=${platformToken}&keyword=${keyword}`;
+
+  try {
+    const searchResultsRaw: AxiosResponse = await axios.get(tverSearchURL, {
+      headers: {
+        'x-tver-platform-type': 'web',
+      },
+      timeout: 5000,
+    });
+    console.log(searchResultsRaw.data);
+    const searchResults = searchResultsRaw.data.result.contents;
+    return searchResults;  
+  } catch (error) {
+    console.error(`Failed to get links from free keyword: ${error}`);
+    throw error;  
+  }
+};

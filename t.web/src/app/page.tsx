@@ -1,95 +1,104 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client"
+
+import React, { useState, useEffect, useRef } from 'react';
+import { getToken } from './api/token';
+import { MyToken } from '@/types/token';
+import { getObjectFromFreeKeyword } from './api/searchTver';
+import { Box, Button, TextField } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import { CardElement } from '@/components/Molecules/CardElement';
+
+interface ContentObject {
+  type: string
+  content: {
+    id: string;
+    version: number;
+    title: string;
+    seriesID: string;
+    endAt: number;
+    broadcastDateLabel: string;
+    isNHKContent: boolean;
+    isSubtitle: boolean;
+    ribbonID: number;
+    seriesTitle: string;
+    isAvailable: boolean;
+    broadcasterName: string;
+    productionProviderName: string;
+  },
+  isLater: boolean,
+  score: number  
+}
 
 export default function Home() {
+  const [platformToken, setPlatformToken] = useState<MyToken>();
+  const [keyword, setKeywor] = useState("");
+  const [searchResult, setSearchResult] = useState<ContentObject[]>();
+  const [videoTitle, setVideoTitle] = useState("");
+
+  const handleGetObject = async () => {
+    if (platformToken && platformToken.platformUID && platformToken.platformToken && keyword) {
+      const resultObject:ContentObject[] = await getObjectFromFreeKeyword(keyword, platformToken.platformUID, platformToken.platformToken);
+      console.log(resultObject);
+      setSearchResult(resultObject);
+    }
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await getToken();
+      setPlatformToken(result);
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <>
+    <Box
+      component="main"
+      sx={{ flexGrow: 1, bgcolor: "background.default", p: 3, "z-index": 1 ,height: '100vh'}}
+      >
+      <div>
+        <Box
+          component="form"
+          sx={{ p: 2
+          }}
+          noValidate
+          autoComplete="off"
+          onSubmit={(e) => {
+            e.preventDefault(); 
+            handleGetObject();
+          }}
+        >
+
+        {platformToken && <h1>{platformToken.platformToken}</h1>}
+        <TextField 
+          id="search-form" 
+          label="Search" 
+          variant="standard" 
+          value={keyword}
+          onChange={e => setKeywor(e.target.value)}
+          />
+          
+        </Box>
+        
+        <Box
+          sx={{ p: 2, overflow: 'auto', maxHeight: '80vh' }}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+          {platformToken && searchResult && searchResult.length > 0 && 
+            <>
+            <div>
+              {searchResult.map((object, index) => (
+                <Box mb={2} key={index} >
+                  <CardElement object={object}/>
+                </Box>
+              ))}
+            </div>
+            </>
+          }
+        </Box>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    </Box>
+    </>
+  );
 }
