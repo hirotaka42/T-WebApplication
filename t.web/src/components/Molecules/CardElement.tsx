@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Button, Card, CardActionArea, CardMedia, CardContent, Typography } from '@mui/material';
 import { Button_OpenIina } from '@/components/Atoms/Button/OpenIina'
 import { Button_CopyLink } from '@/components/Atoms/Button/CopyLink'
+import { Button_OpenVlc } from '../Atoms/Button/OpenVlc';
 
 interface ContentObject {
     type: string
@@ -83,7 +84,7 @@ export const CardElement: React.FC<CardElementProps> = ({ object }) => {
               alignItems: 'center',
             }}
           >
-            <Button_OpenIina videoLink={object.content.id} />
+            <Button_OpenVlc videoLink={object.content.id} />
             <Button_CopyLink videoLink={object.content.id} />
           </Box>
         </CardContent>
