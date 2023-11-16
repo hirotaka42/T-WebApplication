@@ -9,7 +9,7 @@ interface OpenIinaProps {
 export const Button_OpenIina: React.FC<OpenIinaProps> = ({ button_title="open-iina", videoLink }) => {
     const link = `https://tver.jp/episodes/${videoLink}`
     return (
-        <Button variant="outlined" href={`iina://open?url=${encodeURIComponent(link)}`}>
+        <Button sx={{ flexGrow: 1 }} variant="outlined" href={`iina://open?url=${encodeURIComponent(link)}`}>
         {button_title}
         </Button>
     );

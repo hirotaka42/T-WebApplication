@@ -4,9 +4,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { getToken } from './api/token';
 import { MyToken } from '@/types/token';
 import { getObjectFromFreeKeyword } from './api/searchTver';
-import { Box, Button, TextField } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
+import { Box, TextField, Fab } from '@mui/material';
 import { CardElement } from '@/components/Molecules/CardElement';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 interface ContentObject {
   type: string
@@ -33,7 +33,7 @@ export default function Home() {
   const [platformToken, setPlatformToken] = useState<MyToken>();
   const [keyword, setKeywor] = useState("");
   const [searchResult, setSearchResult] = useState<ContentObject[]>();
-  const [videoTitle, setVideoTitle] = useState("");
+  const searchFormRef = useRef<HTMLInputElement>(null);
 
   const handleGetObject = async () => {
     if (platformToken && platformToken.platformUID && platformToken.platformToken && keyword) {
@@ -43,12 +43,15 @@ export default function Home() {
     }
   }
 
+  const focusSearchForm = () => {
+    searchFormRef.current?.focus();
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const result = await getToken();
       setPlatformToken(result);
     };
-
     fetchData();
   }, []);
 
@@ -56,12 +59,12 @@ export default function Home() {
     <>
     <Box
       component="main"
-      sx={{ flexGrow: 1, bgcolor: "background.default", p: 3, "z-index": 1 ,height: '100vh'}}
+      sx={{ flexGrow: 1, bgcolor: "background.default", p: 3, paddingTop: 0, paddingBottom: 0, "z-index": 1 ,height: '100vh'}}
       >
       <div>
         <Box
           component="form"
-          sx={{ p: 2
+          sx={{ p: 2,display: 'flex', justifyContent: 'center'
           }}
           noValidate
           autoComplete="off"
@@ -70,34 +73,36 @@ export default function Home() {
             handleGetObject();
           }}
         >
-
-        {platformToken && <h1>{platformToken.platformToken}</h1>}
-        <TextField 
-          id="search-form" 
-          label="Search" 
-          variant="standard" 
-          value={keyword}
-          onChange={e => setKeywor(e.target.value)}
-          />
-          
+          <TextField 
+            id="search-form" 
+            label="番組タイトル・出演者で検索" 
+            variant="standard" 
+            value={keyword}
+            onChange={e => setKeywor(e.target.value)}
+            inputRef={searchFormRef}
+            sx={{ 
+              width: '80%'
+              }}
+            />
         </Box>
         
         <Box
-          sx={{ p: 2, overflow: 'auto', maxHeight: '80vh' }}
+          sx={{ p: 2, overflow: 'auto', maxHeight: '80vh',display: 'flex',flexWrap: 'wrap' }}
           >
           {platformToken && searchResult && searchResult.length > 0 && 
             <>
-            <div>
               {searchResult.map((object, index) => (
                 <Box mb={2} key={index} >
                   <CardElement object={object}/>
                 </Box>
               ))}
-            </div>
             </>
           }
         </Box>
       </div>
+      <Fab color="primary" aria-label="focus-search-form" sx={{ position: 'fixed', bottom: 16, right: 16 }} onClick={focusSearchForm}>
+        <KeyboardArrowUpIcon />
+      </Fab>
     </Box>
     </>
   );
