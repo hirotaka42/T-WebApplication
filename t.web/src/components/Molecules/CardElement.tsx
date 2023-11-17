@@ -55,7 +55,7 @@ export const CardElement: React.FC<CardElementProps> = ({ object, scrollPosition
             objectFit: 'cover' 
           }}
           placeholder={<div style={{width: '100%', height: '100%', backgroundColor: 'white'}} />}
-          threshold={1600}
+          threshold={160}
         />
         </Box>
       </CardActionArea>

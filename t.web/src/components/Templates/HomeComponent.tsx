@@ -44,13 +44,37 @@ export default function HomeComponent({ scrollPosition}: HomeProps) {
     if (platformToken && platformToken.platformUID && platformToken.platformToken && keyword) {
       const resultObject:ContentObject[] = await getObjectFromFreeKeyword(keyword, platformToken.platformUID, platformToken.platformToken);
       console.log(resultObject);
+      searchFormRef.current?.blur();
       setSearchResult(resultObject);
     }
   }
 
   const focusSearchForm = () => {
+    setKeywor("");
     searchFormRef.current?.focus();
+    scrollToElementById('search-Result-Card-From');
   }
+
+  const scrollToElementById = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const start = element.scrollTop;
+      const end = 0;
+      const distance = end - start;
+      const duration = 400;
+      let startTime: number | null = null;
+  
+      const animation = (currentTime: number) => {
+        if (startTime === null) startTime = currentTime;
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        element.scrollTo(0, start + distance * progress);
+        if (elapsed < duration) window.requestAnimationFrame(animation);
+      };
+  
+      window.requestAnimationFrame(animation);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,15 +108,16 @@ export default function HomeComponent({ scrollPosition}: HomeProps) {
           handleGetObject();
         }}
       >
-        <img 
-          src={tverLogoURLx1}
-          srcSet={`${tverLogoURLx1} 1x, ${tverLogoURLx1} 2x`}
-          alt="TVer" 
-          style={{ 
-            width: '81px', 
-            height: '59px',
-            marginRight: '20px'
-          }}
+        <img
+            onClick={() => window.location.href="/"}
+            src={tverLogoURLx1}
+            srcSet={`${tverLogoURLx1} 1x, ${tverLogoURLx1} 2x`}
+            alt="TVer" 
+            style={{ 
+                width: '81px', 
+                height: '59px',
+                marginRight: '20px'
+            }}
         />
         <TextField 
           id="search-form" 
@@ -123,6 +148,7 @@ export default function HomeComponent({ scrollPosition}: HomeProps) {
         
       <Box
         sx={{ p: 2, overflow: 'auto', maxHeight: '80vh',display: 'flex',flexWrap: 'wrap' }}
+        id="search-Result-Card-From"
         >
         {platformToken && searchResult && searchResult.length > 0 && 
           <>
