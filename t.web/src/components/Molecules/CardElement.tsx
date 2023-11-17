@@ -3,6 +3,8 @@ import { Box, Button, Card, CardActionArea, CardMedia, CardContent, Typography }
 import { Button_OpenIina } from '@/components/Atoms/Button/OpenIina'
 import { Button_CopyLink } from '@/components/Atoms/Button/CopyLink'
 import { Button_OpenVlc } from '../Atoms/Button/OpenVlc';
+import { LazyLoadImage, ScrollPosition } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 interface ContentObject {
     type: string
@@ -27,9 +29,10 @@ interface ContentObject {
   
 interface CardElementProps {
     object: ContentObject;
+    scrollPosition: any;
 }
 
-export const CardElement: React.FC<CardElementProps> = ({ object }) => {
+export const CardElement: React.FC<CardElementProps> = ({ object, scrollPosition }) => {
   return (
     <Box sx={{  padding:'4px', maxWidth: 260, flex: '0 0 auto'}}>
     <Card>
@@ -38,16 +41,22 @@ export const CardElement: React.FC<CardElementProps> = ({ object }) => {
           // await navigator.clipboard.writeText(`https://tver.jp/episodes/${object.content.id}`);
           window.open(`https://tver.jp/episodes/${object.content.id}`, '_blank');
         }}>
-        <Box sx={{ boxShadow: 4 }}>
-          <CardMedia
-            component="img"
-            sx={{
-              maxWidth: '100%',
-              maxHeight: '100%',
-            }}
-            image={`https://statics.tver.jp/images/content/thumbnail/episode/small/${object.content.id}.jpg`}
-            alt={object.content.seriesTitle}
-          />
+        <Box sx={{ boxShadow: 4 , display: 'flex'}}>
+        <LazyLoadImage
+          effect="blur"
+          scrollPosition={scrollPosition}
+          src={`https://statics.tver.jp/images/content/thumbnail/episode/small/${object.content.id}.jpg`}
+          alt={object.content.seriesTitle}
+          style={{ 
+            maxWidth: '100%', 
+            maxHeight: '100%', 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover' 
+          }}
+          placeholder={<div style={{width: '100%', height: '100%', backgroundColor: 'white'}} />}
+          threshold={1600}
+        />
         </Box>
       </CardActionArea>
     </Card>
