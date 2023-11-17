@@ -1,31 +1,10 @@
 import React from 'react';
-import { Box, Button, Card, CardActionArea, CardMedia, CardContent, Typography } from '@mui/material';
+import { Box, Card, CardActionArea, CardMedia, CardContent, Typography } from '@mui/material';
 import { Button_OpenIina } from '@/components/Atoms/Button/OpenIina'
-import { Button_CopyLink } from '@/components/Atoms/Button/CopyLink'
 import { Button_OpenVlc } from '../Atoms/Button/OpenVlc';
 import { LazyLoadImage, ScrollPosition } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-
-interface ContentObject {
-    type: string
-    content: {
-        id: string;
-        version: number;
-        title: string;
-        seriesID: string;
-        endAt: number;
-        broadcastDateLabel: string;
-        isNHKContent: boolean;
-        isSubtitle: boolean;
-        ribbonID: number;
-        seriesTitle: string;
-        isAvailable: boolean;
-        broadcasterName: string;
-        productionProviderName: string;
-    },
-    isLater: boolean,
-    score: number  
-}
+import { ContentObject } from '@/types/ContentObject'
   
 interface CardElementProps {
     object: ContentObject;
@@ -33,19 +12,20 @@ interface CardElementProps {
 }
 
 export const CardElement: React.FC<CardElementProps> = ({ object, scrollPosition }) => {
+  const thumbnailUrl = process.env.NEXT_PUBLIC_TVER_THUMBNAIL;
+
   return (
     <Box sx={{  padding:'4px', maxWidth: 260, flex: '0 0 auto'}}>
     <Card>
       <CardActionArea
         onClick={() => {
-          // await navigator.clipboard.writeText(`https://tver.jp/episodes/${object.content.id}`);
           window.open(`https://tver.jp/episodes/${object.content.id}`, '_blank');
         }}>
         <Box sx={{ boxShadow: 4 , display: 'flex'}}>
         <LazyLoadImage
           effect="blur"
           scrollPosition={scrollPosition}
-          src={`https://statics.tver.jp/images/content/thumbnail/episode/small/${object.content.id}.jpg`}
+          src={`${thumbnailUrl}/episode/small/${object.content.id}.jpg`}
           alt={object.content.seriesTitle}
           style={{ 
             maxWidth: '100%', 
