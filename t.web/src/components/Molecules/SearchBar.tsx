@@ -1,15 +1,17 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useRef} from 'react';
 import { Box, TextField  } from '@mui/material';
 import { Logo } from '../Atoms/Logo';
 import { LoginButton } from '../Atoms/Button/LoginButton'; 
 import { SearchType } from '@/types/Search';
 import { TokenContext } from '@/contexts/TtokenContext';
 import { SearchContext } from '@/contexts/SearchContext';
+import { PageContext } from '@/contexts/PageContext';
 import { getResultObject } from '@/app/api/getResultResponse';
 
 // #region Client Side -----------------------
 export const SearchBar = ({}) => {
   // #region Variable -----------------------
+  const searchInputRef = useRef<HTMLInputElement>(null);
   /* TokenContext */
   const tokenContext = useContext(TokenContext);
   if (!tokenContext) throw new Error('tokenContext not found.');
@@ -18,10 +20,13 @@ export const SearchBar = ({}) => {
   const searchContext = useContext(SearchContext);
   if (!searchContext) throw new Error('searchContext not found.');
   const { resultObject ,setResultObject, keyword, setKeyword } = searchContext;
+  /* PageContext */
+  const pageContext = useContext(PageContext);
+  if (!pageContext) throw new Error('pageContext not found.');
+  const { searchInput, setSearchInput } = pageContext;
   // #endregion
   
   // #region State -----------------------
-  const [searchInput, setSearchInput] = useState('');
   const [isComposing, setIsComposing] = useState(false);
   // #endregion
 
@@ -46,6 +51,9 @@ export const SearchBar = ({}) => {
       const results = await getResultObject(searchParams);
       console.log(results);
       setResultObject(results)
+      if (searchInputRef.current) {
+        searchInputRef.current.blur();
+      }
     } catch (error) {
       console.error('検索中にエラーが発生しました', error);
     }
@@ -73,6 +81,7 @@ export const SearchBar = ({}) => {
         label="番組タイトル・出演者で検索" 
         variant="standard" 
         value={searchInput}
+        inputRef={searchInputRef}
         onChange={(e) => setSearchInput(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && !isComposing) {

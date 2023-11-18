@@ -21,6 +21,7 @@ export default function HomeComponent({ scrollPosition}: HomeProps) {
   
   // #region State -----------------------
   const [footerSelectValue, setFooterSelectValue] = useState(0);
+  const [searchInput, setSearchInput] = useState('');
   const [platformToken, setPlatformToken] = useState<platformToken | null>(null);
   const [keyword, setKeyword] = useState("");
   const [resultObject, setResultObject] = useState<ContentObject[] | null>(null);
@@ -38,6 +39,13 @@ export default function HomeComponent({ scrollPosition}: HomeProps) {
 
 
   // #region Screen Event -----------------------
+  const focusSearchForm = () => {
+    const searchForm = document.getElementById('search-form');
+    if (searchForm) {
+      setSearchInput('')
+      searchForm.focus();
+    }
+  };
   // #endregion
 
   // #region Logic -----------------------
@@ -45,7 +53,7 @@ export default function HomeComponent({ scrollPosition}: HomeProps) {
 
   return (
     <>
-    <PageContext.Provider value={{footerSelectValue, setFooterSelectValue}}>
+    <PageContext.Provider value={{footerSelectValue, setFooterSelectValue, searchInput, setSearchInput}}>
       <TokenContext.Provider value={{platformToken, setPlatformToken}}>
         <SearchContext.Provider value={{resultObject, setResultObject, keyword, setKeyword}}>
           <Box>
@@ -60,7 +68,7 @@ export default function HomeComponent({ scrollPosition}: HomeProps) {
               }}>
 
               <Box component="main">
-                <Fab color="primary" aria-label="focus-search-form" sx={{ position: 'fixed', bottom: 16, right: 16 }}>
+                <Fab color="primary" aria-label="focus-search-form" sx={{ position: 'fixed', bottom: 16, right: 16 }} onClick={focusSearchForm}>
                   <KeyboardArrowUpIcon />
                 </Fab>
               </Box>

@@ -22,7 +22,7 @@ const Footer = () => {
 
   const pageContext = useContext(PageContext);
   if (!pageContext) throw new Error('pageContext not found.');
-  const { footerSelectValue, setFooterSelectValue } = pageContext;
+  const { footerSelectValue, setFooterSelectValue, searchInput, setSearchInput  } = pageContext;
   // #endregion
   
   // #region State -----------------------
@@ -75,6 +75,7 @@ const Footer = () => {
       console.log('keyword is Not');
       return;
     }
+    setSearchInput(newKeyword)
     await fetchSearchResults(newKeyword);
   };
 
