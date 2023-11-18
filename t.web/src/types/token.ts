@@ -1,5 +1,5 @@
 
-export interface MyToken {
-    platformUID: string;
-    platformToken: string;
+export interface platformToken {
+    UID: string;
+    Token: string;
 }

@@ -8,10 +8,9 @@ import { ContentObject } from '@/types/ContentObject'
   
 interface CardElementProps {
     object: ContentObject;
-    scrollPosition: any;
 }
 
-export const CardElement: React.FC<CardElementProps> = ({ object, scrollPosition }) => {
+export const CardElement: React.FC<CardElementProps> = ({ object }) => {
   const thumbnailUrl = process.env.NEXT_PUBLIC_TVER_THUMBNAIL;
 
   return (
@@ -24,7 +23,6 @@ export const CardElement: React.FC<CardElementProps> = ({ object, scrollPosition
         <Box sx={{ boxShadow: 4 , display: 'flex'}}>
         <LazyLoadImage
           effect="blur"
-          scrollPosition={scrollPosition}
           src={`${thumbnailUrl}/episode/small/${object.content.id}.jpg`}
           alt={object.content.seriesTitle}
           style={{ 

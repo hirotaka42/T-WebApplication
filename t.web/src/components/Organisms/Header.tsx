@@ -1,20 +1,21 @@
-import React, { ChangeEvent, Ref, FormEvent } from 'react';
-import { SearchBar } from '../molecules/SearchBar';
+import React, { useEffect, useContext } from 'react';
+import { SearchBar } from '@/components/Molecules/SearchBar';
+import { TokenContext } from '@/contexts/TtokenContext';
+import { SearchContext } from '@/contexts/SearchContext';
 
-interface HeaderProps {
-  value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  inputRef: Ref<HTMLInputElement>;
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
-}
 
-export const Header: React.FC<HeaderProps> = ({ value, onChange, inputRef, onSubmit }) => (
+export const Header = () => {
+  /* TokenContext */
+  const tokenContext = useContext(TokenContext);
+  if (!tokenContext) throw new Error('tokenContext not found.');
+  const { platformToken ,setPlatformToken } = tokenContext;
+  /* SearchContext */
+  const searchContext = useContext(SearchContext);
+  if (!searchContext) throw new Error('searchContext not found.');
+  const { resultObject ,setResultObject, keyword, setKeyword } = searchContext;
+  
+  return(
   <>
-    <SearchBar 
-      value={value} 
-      onChange={onChange} 
-      inputRef={inputRef}
-      onSubmit={onSubmit}
-    />
+    <SearchBar />
   </>
-);
+)};

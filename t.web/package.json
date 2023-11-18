@@ -13,12 +13,14 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.16",
     "@mui/material": "^5.14.17",
+    "@types/react-swipeable-views": "^0.13.5",
     "axios": "^1.6.1",
     "next": "14.0.2",
     "qs": "^6.11.2",
     "react": "^18",
     "react-dom": "^18",
     "react-lazy-load-image-component": "^1.6.0",
+    "react-swipeable-views": "^0.14.0",
     "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
