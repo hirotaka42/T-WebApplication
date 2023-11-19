@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext, useRef} from 'react';
 import { Box, TextField  } from '@mui/material';
-import { Logo } from '../Atoms/Logo';
-import { LoginButton } from '../Atoms/Button/LoginButton'; 
+import { Logo } from '@/components/Atoms/Logo';
+import { LoginButton } from '@/components/Atoms/Button/LoginButton'; 
 import { SearchType } from '@/types/Search';
 import { TokenContext } from '@/contexts/TtokenContext';
 import { SearchContext } from '@/contexts/SearchContext';

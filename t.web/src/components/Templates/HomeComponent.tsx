@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getToken } from '@/app/api/token';
+import { getToken } from '@/app/api/sessionResponse';
 import { Box, Fab } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { ScrollPosition } from 'react-lazy-load-image-component';

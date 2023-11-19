@@ -8,9 +8,10 @@ import { ContentObject } from '@/types/ContentObject'
   
 interface CardElementProps {
     object: ContentObject;
+    isMobile: boolean
 }
 
-export const CardElement: React.FC<CardElementProps> = ({ object }) => {
+export const CardElement: React.FC<CardElementProps> = ({ object, isMobile }) => {
   const thumbnailUrl = process.env.NEXT_PUBLIC_TVER_THUMBNAIL;
 
   return (
@@ -79,8 +80,20 @@ export const CardElement: React.FC<CardElementProps> = ({ object }) => {
               alignItems: 'center',
             }}
           >
+
             <Button_OpenVlc videoLink={object.content.id} />
             <Button_OpenIina videoLink={object.content.id} />
+            
+            {/* {isMobile ? (
+              <Typography >
+                {`${object.content.broadcasterName} ${object.content.broadcastDateLabel}`}
+              </Typography>
+            ) : (
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Button_OpenVlc videoLink={object.content.id} />
+                <Button_OpenIina videoLink={object.content.id} />
+              </Box>
+            )} */}
           </Box>
         </CardContent>
       </Box>

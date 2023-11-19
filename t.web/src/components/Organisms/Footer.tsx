@@ -8,10 +8,12 @@ import { SearchContext } from '@/contexts/SearchContext';
 import { PageContext } from '@/contexts/PageContext';
 import { SearchType } from '@/types/Search';
 import { getResultObject } from '@/app/api/getResultResponse';
+import { useMediaQuery } from '@mui/material';
 
 const Footer = () => {
   // #region Valiable -----------------------
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const tokenContext = useContext(TokenContext);
   if (!tokenContext) throw new Error('tokenContext not found.');
   const { platformToken, setPlatformToken } = tokenContext;
@@ -98,8 +100,9 @@ const Footer = () => {
               sx={{ p: 2, overflow: 'auto', maxHeight: '100%', display: 'flex', flexWrap: 'wrap' }}
             >
               {resultObject ? resultObject.map((object, index) => (
-                <Box mb={2} key={index} >
-                  <CardElement object={object} />
+                /** スマホでは表示変更 */
+                <Box mb={2} key={index} sx={{ width: isMobile ? '100%' : 'auto' }}>
+                  <CardElement object={object} isMobile={isMobile} />
                 </Box>
               )) : []}
             </Box>

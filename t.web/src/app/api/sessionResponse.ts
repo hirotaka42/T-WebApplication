@@ -8,15 +8,17 @@ export const getToken = async () => {
   const requestBody = qs.stringify({device_type: 'pc'});  // URLエンコード
 
   try {
-    const tokenResponse: AxiosResponse = await axios.post(getTokenURL, requestBody, {
+    const sessionResponse: AxiosResponse = await axios.post(getTokenURL, requestBody, {
       headers: {
+        'Origin': 'https://s.tver.jp',
+        'Referer': 'https://s.tver.jp/',
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      timeout: 3000,
+      timeout: 500,
     });
-    console.log(tokenResponse.data)
-    const UID = tokenResponse.data.result.platform_uid;
-    const Token = tokenResponse.data.result.platform_token;
+    console.log(sessionResponse.data)
+    const UID = sessionResponse.data.result.platform_uid;
+    const Token = sessionResponse.data.result.platform_token;
     const resultToken: platformToken = { UID,Token };
     return resultToken;
   } catch (error) {

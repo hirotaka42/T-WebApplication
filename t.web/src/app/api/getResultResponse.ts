@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { SearchType } from '../../types/Search'
+import { SearchType } from '@/types/Search'
 
 // 検索結果のobjectを返却
 export const getResultObject = async ( Search: SearchType ) => {
